@@ -4,18 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>答題判定器</title>
+<title>答題判定</title>
 <style>
   :root{
-    --stage:#2A1020;
-    --stage-lit:#5A2340;
-    --ivory:#FFF1DF;
-    --mint:#3ED8AE;
-    --mint-deep:#18785F;
-    --coral:#FF4D5E;
-    --coral-deep:#8E1B2A;
-    --rounded: ui-rounded, "SF Pro Rounded", -apple-system, "PingFang TC",
-               "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+    --paper:#CFCAC0;
+    --paper-lift:#DCD8CF;
+    --card:#E4E0D7;
+    --card-lit:#EEEBE3;
+    --edge:#BEB8AC;
+    --ink:#4C473F;
+    --ink-soft:#847D71;
+    --sage:#9EAE9C;
+    --sage-deep:#6E8069;
+    --clay:#BE9186;
+    --clay-deep:#96685D;
+    --sans:"PingFang TC","Noto Sans TC","Hiragino Sans","Microsoft JhengHei",
+           -apple-system,system-ui,sans-serif;
   }
 
   *{box-sizing:border-box;}
@@ -23,17 +27,15 @@
   html,body{height:100%;margin:0;}
 
   body{
-    font-family:var(--rounded);
-    color:var(--ivory);
+    font-family:var(--sans);
+    color:var(--ink);
     background:
-      radial-gradient(120% 90% at 50% 8%, var(--stage-lit) 0%, var(--stage) 62%),
-      var(--stage);
+      radial-gradient(140% 100% at 50% 0%, var(--paper-lift) 0%, var(--paper) 70%),
+      var(--paper);
     display:flex;
-    flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:clamp(20px,4vh,44px);
-    padding:max(24px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom));
+    padding:max(28px,env(safe-area-inset-top)) 22px max(28px,env(safe-area-inset-bottom));
     -webkit-user-select:none;
     user-select:none;
     -webkit-tap-highlight-color:transparent;
@@ -42,48 +44,49 @@
 
   .board{
     display:flex;
-    gap:clamp(16px,3.4vw,40px);
-    width:min(880px,100%);
+    gap:clamp(14px,2vw,22px);
+    width:min(920px,100%);
   }
 
   .pad{
     flex:1;
+    position:relative;
     appearance:none;
     border:none;
     cursor:pointer;
     font-family:inherit;
-    color:var(--ivory);
-    background:linear-gradient(#3A1830,#24101F);
-    border-radius:clamp(22px,3vw,34px);
-    padding:clamp(20px,3.5vh,34px) 12px clamp(16px,2.6vh,26px);
+    color:var(--ink);
+    background:var(--card);
+    border-radius:4px;
+    padding:clamp(26px,4.4vh,44px) 14px clamp(22px,3.6vh,34px);
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:clamp(10px,1.8vh,18px);
-    box-shadow:
-      inset 0 2px 0 rgba(255,255,255,.10),
-      0 10px 0 -2px var(--rim),
-      0 16px 34px rgba(0,0,0,.45);
-    transition:transform .09s ease, box-shadow .09s ease;
+    gap:clamp(16px,2.6vh,26px);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);
+    transition:background-color .3s ease;
   }
 
-  .pad.correct{--rim:var(--mint-deep); --ink:var(--mint);}
-  .pad.wrong{--rim:var(--coral-deep); --ink:var(--coral);}
-
-  .pad:active,.pad.hit{
-    transform:translateY(7px);
-    box-shadow:
-      inset 0 2px 0 rgba(255,255,255,.06),
-      0 3px 0 -2px var(--rim),
-      0 6px 16px rgba(0,0,0,.4);
+  .pad::before{
+    content:"";
+    position:absolute;
+    inset:0 0 auto 0;
+    height:5px;
+    border-radius:4px 4px 0 0;
+    background:var(--tone);
   }
 
-  .pad:focus-visible{outline:3px solid var(--ivory); outline-offset:5px;}
+  .pad.correct{--tone:var(--sage); --tone-deep:var(--sage-deep);}
+  .pad.wrong{--tone:var(--clay); --tone-deep:var(--clay-deep);}
+
+  .pad:active,.pad.hit{background-color:var(--card-lit);}
+
+  .pad:focus-visible{outline:2px solid var(--ink);outline-offset:5px;}
 
   .glyph{
     position:relative;
-    width:clamp(96px,17vw,168px);
-    height:clamp(96px,17vw,168px);
+    width:clamp(92px,15vw,152px);
+    height:clamp(92px,15vw,152px);
     display:grid;
     place-items:center;
   }
@@ -92,43 +95,46 @@
 
   .glyph path,.glyph circle{
     fill:none;
-    stroke:var(--ink);
-    stroke-width:13;
+    stroke:var(--tone-deep);
+    stroke-width:6.5;
     stroke-linecap:round;
-    filter:drop-shadow(0 0 14px color-mix(in srgb,var(--ink) 55%,transparent));
   }
 
   .halo{
     position:absolute;
-    inset:-6%;
+    inset:-8%;
     border-radius:50%;
-    border:3px solid var(--ink);
+    border:1.5px solid var(--tone-deep);
     opacity:0;
     pointer-events:none;
   }
 
-  .pad.hit .halo{animation:ping .55s ease-out;}
+  .pad.hit .halo{animation:ping .6s ease-out;}
 
   @keyframes ping{
-    from{opacity:.75; transform:scale(.82);}
-    to{opacity:0; transform:scale(1.35);}
+    from{opacity:.5; transform:scale(.88);}
+    to{opacity:0; transform:scale(1.28);}
   }
 
   .label{
-    font-size:clamp(26px,4.4vw,42px);
-    font-weight:800;
-    letter-spacing:.06em;
+    font-size:clamp(15px,1.9vw,19px);
+    font-weight:400;
+    letter-spacing:.36em;
+    text-indent:.36em;
     line-height:1;
+    color:var(--ink-soft);
   }
 
   @media (max-width:560px){
     .board{flex-direction:column;}
-    .pad{flex-direction:row; justify-content:center; gap:18px; padding:18px 20px;}
-    .glyph{width:66px;height:66px;}
+    .pad{flex-direction:row;justify-content:center;gap:22px;padding:22px 20px;}
+    .pad::before{inset:0 auto 0 0;width:5px;height:auto;border-radius:4px 0 0 4px;}
+    .glyph{width:62px;height:62px;}
   }
 
   @media (prefers-reduced-motion:reduce){
-    .pad,.pad.hit .halo{transition:none;animation:none;}
+    .pad{transition:none;}
+    .pad.hit .halo{animation:none;}
   }
 </style>
 </head>
@@ -146,7 +152,7 @@
   <button class="pad wrong" id="padWrong" aria-label="答錯">
     <span class="glyph">
       <span class="halo"></span>
-      <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M26 26 L94 94 M94 26 L26 94"/></svg>
+      <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M27 27 L93 93 M93 27 L27 93"/></svg>
     </span>
     <span class="label">答錯</span>
   </button>
@@ -211,7 +217,7 @@
     pad.classList.remove("hit");
     void pad.offsetWidth;
     pad.classList.add("hit");
-    setTimeout(function(){ pad.classList.remove("hit"); }, 560);
+    setTimeout(function(){ pad.classList.remove("hit"); }, 600);
   }
 
   var padCorrect = document.getElementById("padCorrect");
