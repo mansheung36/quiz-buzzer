@@ -40,15 +40,6 @@
     overflow:hidden;
   }
 
-  h1{
-    margin:0;
-    font-size:clamp(17px,2.4vw,21px);
-    font-weight:600;
-    letter-spacing:.14em;
-    color:#E7B9CE;
-    opacity:.85;
-  }
-
   .board{
     display:flex;
     gap:clamp(16px,3.4vw,40px);
@@ -130,23 +121,6 @@
     line-height:1;
   }
 
-  .korean{
-    font-size:clamp(13px,1.7vw,17px);
-    font-weight:500;
-    letter-spacing:.08em;
-    color:var(--ink);
-    opacity:.9;
-    line-height:1;
-  }
-
-  .hint{
-    margin:0;
-    font-size:clamp(12px,1.5vw,14px);
-    letter-spacing:.05em;
-    color:#D9A7BE;
-    opacity:.6;
-  }
-
   @media (max-width:560px){
     .board{flex-direction:column;}
     .pad{flex-direction:row; justify-content:center; gap:18px; padding:18px 20px;}
@@ -160,18 +134,13 @@
 </head>
 <body>
 
-<h1>答題判定器</h1>
-
 <div class="board">
   <button class="pad correct" id="padCorrect" aria-label="答對">
     <span class="glyph">
       <span class="halo"></span>
       <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="46"/></svg>
     </span>
-    <span>
-      <span class="label">答對</span><br>
-      <span class="korean">딩동댕</span>
-    </span>
+    <span class="label">答對</span>
   </button>
 
   <button class="pad wrong" id="padWrong" aria-label="答錯">
@@ -179,14 +148,9 @@
       <span class="halo"></span>
       <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M26 26 L94 94 M94 26 L26 94"/></svg>
     </span>
-    <span>
-      <span class="label">答錯</span><br>
-      <span class="korean">땡</span>
-    </span>
+    <span class="label">答錯</span>
   </button>
 </div>
-
-<p class="hint">鍵盤：1 答對 · 2 答錯</p>
 
 <script>
 (function(){
