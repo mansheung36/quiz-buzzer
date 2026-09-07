@@ -7,17 +7,17 @@
 <title>答題判定</title>
 <style>
   :root{
-    --paper:#CFCAC0;
-    --paper-lift:#DCD8CF;
-    --card:#E4E0D7;
-    --card-lit:#EEEBE3;
-    --edge:#BEB8AC;
-    --ink:#4C473F;
-    --ink-soft:#847D71;
-    --sage:#9EAE9C;
-    --sage-deep:#6E8069;
-    --clay:#BE9186;
-    --clay-deep:#96685D;
+    --paper:#E5E8E1;
+    --paper-lift:#F2F4EF;
+    --card:#FCFCFA;
+    --card-lit:#FFFFFF;
+    --edge:#D2D7CB;
+    --ink:#454A44;
+    --ink-soft:#7B827A;
+    --sage:#93A691;
+    --sage-deep:#5E7159;
+    --clay:#BD8B7F;
+    --clay-deep:#8D5F54;
     --sans:"PingFang TC","Noto Sans TC","Hiragino Sans","Microsoft JhengHei",
            -apple-system,system-ui,sans-serif;
   }
@@ -63,8 +63,10 @@
     flex-direction:column;
     align-items:center;
     gap:clamp(16px,2.6vh,26px);
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);
-    transition:background-color .3s ease;
+    box-shadow:
+      0 1px 2px rgba(60,66,58,.05),
+      0 10px 24px rgba(60,66,58,.08);
+    transition:background-color .3s ease, box-shadow .3s ease;
   }
 
   .pad::before{
@@ -79,7 +81,13 @@
   .pad.correct{--tone:var(--sage); --tone-deep:var(--sage-deep);}
   .pad.wrong{--tone:var(--clay); --tone-deep:var(--clay-deep);}
 
-  .pad:active,.pad.hit{background-color:var(--card-lit);}
+  .pad:active,.pad.hit{
+    background-color:var(--card-lit);
+    box-shadow:
+      0 0 0 1.5px var(--tone),
+      0 2px 4px rgba(60,66,58,.06),
+      0 14px 30px rgba(60,66,58,.11);
+  }
 
   .pad:focus-visible{outline:2px solid var(--ink);outline-offset:5px;}
 
@@ -96,7 +104,7 @@
   .glyph path,.glyph circle{
     fill:none;
     stroke:var(--tone-deep);
-    stroke-width:6.5;
+    stroke-width:15;
     stroke-linecap:round;
   }
 
